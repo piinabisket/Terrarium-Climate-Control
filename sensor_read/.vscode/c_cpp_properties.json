@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Users/piinabisket/Documents/Arduino/libraries/*",
+                "/Users/piinabisket/Documents/Arduino/libraries/Adafruit_TouchScreen/",
+                "/Users/piinabisket/Documents/Arduino/libraries/Adafruit_BusIO/",
+                "/Users/piinabisket/Documents/Arduino/libraries/Adafruit_GFX_Library/",
+                "/Users/piinabisket/Documents/Arduino/libraries/Adafruit_TFTLCD_Library/",
+                "/Users/piinabisket/Documents/Arduino/libraries/Adafruit_Unified_Sensor/",
+                "/Users/piinabisket/Documents/Arduino/libraries/DHT_sensor_library/",
+                "/Users/piinabisket/Library/Arduino15/packages/arduino/tools/**",
+                "/Users/piinabisket/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/**",
+                "/Users/piinabisket/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/**"
+
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}

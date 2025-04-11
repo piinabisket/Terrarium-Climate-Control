@@ -1,0 +1,6 @@
+{
+    "port": "/dev/tty.usbserial-10",
+    "board": "arduino:avr:uno",
+    "programmer": "avrisp",
+    "sketch": "touchScreen.ino"
+}
