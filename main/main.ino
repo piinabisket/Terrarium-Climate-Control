@@ -34,6 +34,7 @@
 #define WHITE   0xFFFF
 
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
+//GFXcanvas1 tft(320, 240);
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 
 boolean buttonEnabled = true;
@@ -97,6 +98,7 @@ void loop()
   pinMode(XM, OUTPUT);
   pinMode(YP, OUTPUT);
   //Draw Header
+  //tft.fillScreen(0);
   tft.setCursor(6, 6);
   tft.setTextColor(WHITE, BLACK);
   tft.setTextSize(3);
@@ -121,6 +123,6 @@ void loop()
   tft.fillRect(273, 64, 38, 38, BLACK);
   tft.fillRect(225, 66, 35, 30, WHITE);
   tft.fillRect(275, 66, 35, 30, WHITE);
-  delay(10);  
+  //display.drawBitmap(0, 0, tft.getBuffer(), tft.width(), tft.height(), 0xFFFF, 0x0000);
 }
 
