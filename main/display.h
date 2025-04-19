@@ -1,6 +1,12 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
+
 #include "main.h"
+
+#define SCREEN_HOME 0
+#define SCREEN_CONF_SETPOINTS 1
+#define SCREEN_CONF_TIMES 2
+#define SCREEN_CONF_INTERVALS 3
 
 const unsigned char backButton [] PROGMEM = {
   0xff, 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xe0, 0xff, 
@@ -82,6 +88,7 @@ const unsigned char minusButton [] PROGMEM = {
 
 extern bool tempButtonState;
 extern bool humidButtonState;
+extern bool intButtonState;
 extern bool configButtonState;
 extern bool homeButtonState;
 extern int screen;
@@ -89,15 +96,21 @@ extern int screen;
 void drawButtons();
 void displayHome();
 void displayConfig();
+void drawConfig1();
+void drawConfig2();
+void drawConfig3();
 bool checkButton(TSPoint p, int x, int y, bool &state, 
-   unsigned char *bitmap, void (*func)());
+            unsigned char *bitmap, void (*func)());
 void tempUpButtonCallback();
 void tempDownButtonCallback();
 void humidUpButtonCallback();
 void humidDownButtonCallback();
+void humidIntervalDownButtonCallback();
+void humidIntervalUpButtonCallback();
 void homeButtonCallback();
 void backButtonCallback();
 void nextButtonCallback();
 void prevButtonCallback();
-void drawInvertBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color);
+void drawInvertBitmap(int16_t x, int16_t y, const uint8_t *bitmap, 
+            int16_t w, int16_t h, uint16_t color);
 #endif

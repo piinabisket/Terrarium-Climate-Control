@@ -6,21 +6,29 @@
 #include <TouchScreen.h>
 #include <EEPROM.h>
 
+/* Uncomment to enable serial outputs for debug */
 #define SERIAL
+/* Uncomment to set memory to initial values
+ * Must be triggered once on first bootup
+ * Must be uncommented to properly save user settings
+ */
+//#define INIT_MEM
 
+/* INI9341 LCD display */
 #define LCD_CS A3 
 #define LCD_CD A2 
 #define LCD_WR A1 
 #define LCD_RD A0 
 #define LCD_RESET A4 
 
-#define TS_MINX 105
-#define TS_MINY 85
+/* Touchscreen minimums and maximums, adjust to display*/
+#define TS_MINX 95
+#define TS_MINY 90
 #define TS_MAXX 970
 #define TS_MAXY 940
 
-#define YP A2  // must be an analog pin, use "An" notation!
-#define XM A3  // must be an analog pin, use "An" notation!
+#define YP A2  // must be an analog pin
+#define XM A3  // must be an analog pin
 #define YM 8   // can be a digital pin
 #define XP 9   // can be a digital pin
 
@@ -33,7 +41,7 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-//Button Positions
+/* Button Positions */
 #define TEMP_DOWN_X 220
 #define TEMP_DOWN_Y 71
 #define TEMP_UP_X 265
@@ -42,7 +50,10 @@
 #define HUM_DOWN_Y 116
 #define HUM_UP_X 265
 #define HUM_UP_Y 116
-
+#define INT_UP_X 265
+#define INT_UP_Y 80
+#define INT_DOWN_X 175
+#define INT_DOWN_Y 80
 #define BACK_X 265
 #define BACK_Y 5
 #define NEXT_X 265
@@ -56,6 +67,7 @@
 //User settings memory locations
 #define TS_MEM 0
 #define HS_MEM 1
+#define HIS_MEM 2
 
 extern MCUFRIEND_kbv tft;
 extern TouchScreen ts;
@@ -63,8 +75,10 @@ extern TouchScreen ts;
 extern TSPoint p;                      //touchscreen datapoint
 extern int8_t humidSetpoint;           //setpoints for system to adjust to
 extern int8_t tempSetpoint;
+extern int8_t humidIntervalSetpoint;
 
 void setup();
 void loop();
+void updateSettings();
 
 #endif
