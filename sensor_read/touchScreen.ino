@@ -1,11 +1,5 @@
 
 
-   //////////////////////////////////////////////
-  //        2.8" TOUCH SCREEN DEMO            //
- //                                          //
-//           http://www.educ8s.tv           //
-/////////////////////////////////////////////
-
 #include <Adafruit_TFTLCD.h> 
 #include <Adafruit_GFX.h>    
 #include <TouchScreen.h>

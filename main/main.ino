@@ -19,7 +19,7 @@ bool humidButtonState = true;
 bool configButtonState = true;
 bool homeButtonState = true;
 bool intButtonState = true;
-int screen = 1;                 //flag to indicate what screen is being rendered
+int screen = 0;                 //flag to indicate what screen is being rendered
 
 void setup() {
   Serial.begin(9600);
@@ -55,7 +55,7 @@ void loop()
       Serial.print("\tY = "); Serial.print(p.y);
       Serial.print("\n");
       #endif
-            p.x = map(p.x, TS_MINX, TS_MAXX, 0, 320);
+      p.x = map(p.x, TS_MINX, TS_MAXX, 0, 320);
       p.y = map(p.y, TS_MINY, TS_MAXY, 0, 240);
       //Detect button presses on config screen
       if(screen){   
@@ -66,24 +66,30 @@ void loop()
         //Return from config to home button
         else if(checkButton(p, BACK_X, BACK_Y, configButtonState, backButton, *backButtonCallback)){continue;}
 
-        if(screen == SCREEN_CONF_SETPOINTS){
-          //Temp Setpoint DOWN button pressed
-          if(checkButton(p, TEMP_DOWN_X, TEMP_DOWN_Y, tempButtonState, minusButton, *tempDownButtonCallback)){continue;}
-          //Temp Setpoint UP button pressed
-          else if(checkButton(p, TEMP_UP_X, TEMP_UP_Y, tempButtonState, plusButton, *tempUpButtonCallback)){continue;}
-          //Humidity UP button pressed
-          else if(checkButton(p, HUM_UP_X, HUM_UP_Y, humidButtonState, plusButton, *humidUpButtonCallback)){continue;}
-          //Humidity DOWN button pressed
-          else if(checkButton(p, HUM_DOWN_X, HUM_DOWN_Y, humidButtonState, minusButton, *humidDownButtonCallback)){continue;}
-        }
-        else if(screen == SCREEN_CONF_TIMES){
-        }
-        else if(screen == SCREEN_CONF_INTERVALS){
-          //Humidity Interval UP button pressed
-          if(checkButton(p, INT_UP_X, INT_UP_Y, intButtonState, plusButton, *humidIntervalUpButtonCallback)){continue;}
-          //Humidity Interval DOWN button pressed
-          else if(checkButton(p, INT_DOWN_X, INT_DOWN_Y, intButtonState, minusButton, *humidIntervalDownButtonCallback)){continue;}
-        }
+        switch(screen)
+          case SCREEN_CONF_SETPOINTS:
+            //Temp Setpoint DOWN button pressed
+            if(checkButton(p, TEMP_DOWN_X, TEMP_DOWN_Y, tempButtonState, minusButton, *tempDownButtonCallback)){continue;}
+            //Temp Setpoint UP button pressed
+            else if(checkButton(p, TEMP_UP_X, TEMP_UP_Y, tempButtonState, plusButton, *tempUpButtonCallback)){continue;}
+            //Humidity UP button pressed
+            else if(checkButton(p, HUM_UP_X, HUM_UP_Y, humidButtonState, plusButton, *humidUpButtonCallback)){continue;}
+            //Humidity DOWN button pressed
+            else if(checkButton(p, HUM_DOWN_X, HUM_DOWN_Y, humidButtonState, minusButton, *humidDownButtonCallback)){continue;}
+            break;
+
+          case SCREEN_CONF_TIMES:
+            break;
+
+          case SCREEN_CONF_INTERVALS:
+            //Humidity Interval UP button pressed
+            if(checkButton(p, INT_UP_X, INT_UP_Y, intButtonState, plusButton, *humidIntervalUpButtonCallback)){continue;}
+            //Humidity Interval DOWN button pressed
+            else if(checkButton(p, INT_DOWN_X, INT_DOWN_Y, intButtonState, minusButton, *humidIntervalDownButtonCallback)){continue;}
+            break;
+          
+          case default:
+            break;
       }
       //Home Screen buttons
       else{

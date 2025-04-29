@@ -14,14 +14,7 @@
  */
 //#define INIT_MEM
 
-/* INI9341 LCD display */
-#define LCD_CS A3 
-#define LCD_CD A2 
-#define LCD_WR A1 
-#define LCD_RD A0 
-#define LCD_RESET A4 
-
-/* Touchscreen minimums and maximums, adjust to display*/
+/* Touchscreen minimums and maximums, adjust to display */
 #define TS_MINX 95
 #define TS_MINY 90
 #define TS_MAXX 970
