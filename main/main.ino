@@ -1,6 +1,42 @@
 #include "main.h"
 #include "display.h"
+#include "lcd-driver.h"
 
+#define RST A4
+#define CS A3
+#define CD A2
+#define WR A1
+#define RD A0
+
+#define D0 8
+#define D1 9
+#define D2 2
+#define D3 3
+#define D4 4
+#define D5 5
+#define D6 6
+#define D7 7
+
+int D[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
+
+LCD_Driver lcd = LCD_Driver(RST, CS, CD, RD, WR, D);
+
+MCUFRIEND_kbv tft;
+
+void setup(){
+  Serial.begin(9600);
+  lcd.begin();
+  //tft.reset();
+  //tft.begin(tft.readID());
+  delay(500);
+
+}
+
+void loop(){
+
+  delay(1000);
+}
+/*
 MCUFRIEND_kbv tft;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
@@ -26,7 +62,6 @@ void setup() {
   tft.reset();
   tft.begin(tft.readID());
   tft.setRotation(3);
-  Serial.begin(9600);
   delay(500);
   Serial.println(tft.readID(), HEX);
   tft.fillScreen(BLACK);
@@ -111,6 +146,7 @@ void loop()
     displayHome();
   }
 }
+*/
 
 /*
  *  @brief  Writes user settings to EEPROM if settings changed
@@ -126,3 +162,4 @@ void updateSettings(){
     EEPROM.write(HS_MEM, humidSetpoint);
   }
 }
+
