@@ -62,6 +62,10 @@
 #define HS_MEM 1
 #define HIS_MEM 2
 
+//Sensor pins
+#define LIGHT_PIN 33
+#define HEAT_PIN 34
+
 extern MCUFRIEND_kbv tft;
 extern TouchScreen ts;
 
@@ -70,8 +74,18 @@ extern int8_t humidSetpoint;           //setpoints for system to adjust to
 extern int8_t tempSetpoint;
 extern int8_t humidIntervalSetpoint;
 
+extern int8_t second;
+extern int8_t hour;
+extern int8_t minute;
+extern int8_t day;
+extern int8_t month;
+
+extern bool alarm;
+
 void setup();
 void loop();
+void setupRTC();
+void checkSensors();
 void updateSettings();
 
 #endif

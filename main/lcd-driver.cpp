@@ -157,6 +157,9 @@ void LCD_Driver::begin() {
    writeData(0x00);
    writeData(0x1B);
 
+   writeCommand(0xB4);  //Inversion control
+   writeData(0x00);
+   
    writeCommand(0xC0);  // Power control 1
    writeData(0x21);
 
@@ -170,11 +173,49 @@ void LCD_Driver::begin() {
    writeCommand(0xC7);  // VCOM control 2
    writeData(0xB5);
 
+   writeCommand(0x36);  //Memory Access
+   writeData(0x48);
+
    writeCommand(0xF2);  //Enable 3G
    writeData(0x00);
 
-   writeCommand(0x26);  //Enable 3G
+   writeCommand(0x26);  //Gamma Set
    writeData(0x01);
+
+   writeCommand(0xE0);
+   writeData(0x0f);
+   writeData(0x26);
+   writeData(0x24);
+   writeData(0x0b);
+   writeData(0x0e);
+   writeData(0x09);
+   writeData(0x54);
+   writeData(0xa8);
+   writeData(0x46);
+   writeData(0x0c);
+   writeData(0x17);
+   writeData(0x09);
+   writeData(0x0f);
+   writeData(0x07);
+   writeData(0x00);
+
+   writeCommand(0xE1);
+   writeData(0x00);
+   writeData(0x19);
+   writeData(0x1b);
+   writeData(0x04);
+   writeData(0x10);
+   writeData(0x07);
+   writeData(0x2a);
+   writeData(0x47);
+   writeData(0x39);
+   writeData(0x03);
+   writeData(0x06);
+   writeData(0x06);
+   writeData(0x30);
+   writeData(0x38);
+   writeData(0x0f);
+
 
    // Display ON
    writeCommand(0x29);

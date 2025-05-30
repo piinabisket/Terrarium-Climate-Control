@@ -16,7 +16,19 @@ void displayHome(){
   }
   homeButtonState = false;
   tft.setCursor(6,8);
-  tft.print("Hello World");
+  tft.setTextSize(3);
+  tft.setTextColor(WHITE, BLACK);
+  tft.print(hour);
+  tft.print(":");
+  tft.print(minute);
+  tft.print(":");
+  tft.print(second);
+  tft.print("  ");
+  tft.print(day);
+  tft.print("/");
+  tft.print(month);
+  tft.println("\n ");
+  tft.print(alarm);
   tft.drawRect(0,0,320,240,WHITE);
 }
 /*
@@ -251,7 +263,7 @@ void backButtonCallback(){
  */
 void nextButtonCallback(){
   if(screen == SCREEN_CONF_INTERVALS){
-    screen = SCREEN_CONF_TIMES;
+    screen = SCREEN_CONF_SETPOINTS;
   }
   else{
     screen++;

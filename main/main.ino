@@ -1,54 +1,33 @@
 #include "main.h"
 #include "display.h"
-#include "lcd-driver.h"
 
-#define RST A4
-#define CS A3
-#define CD A2
-#define WR A1
-#define RD A0
+#include <Wire.h>
+#include <I2C_RTC.h>
 
-#define D0 8
-#define D1 9
-#define D2 2
-#define D3 3
-#define D4 4
-#define D5 5
-#define D6 6
-#define D7 7
-
-int D[8] = {D0, D1, D2, D3, D4, D5, D6, D7};
-
-LCD_Driver lcd = LCD_Driver(RST, CS, CD, RD, WR, D);
-
-MCUFRIEND_kbv tft;
-
-void setup(){
-  Serial.begin(9600);
-  lcd.begin();
-  //tft.reset();
-  //tft.begin(tft.readID());
-  delay(500);
-
-}
-
-void loop(){
-
-  delay(1000);
-}
-/*
 MCUFRIEND_kbv tft;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 
 int period = 20;                //limit screen refresh to conserve power
-int timeout = 100000;              //
+int timeout = 100000;              //timeout value
 unsigned long time_now = 0;
+
+static DS3231 RTC;
 
 TSPoint p;                      //touchscreen datapoint
 int8_t humidSetpoint;           //setpoints for system to adjust to
 int8_t tempSetpoint;
 int8_t humidIntervalSetpoint;
+
+int8_t second;
+int8_t minute;
+int8_t hour;
+int8_t day;
+int8_t month;
+
+int8_t alarmPeriod = 5;         //alarm period 1 in seconds
+bool alarm = false;             //alarm 1 flag
+int8_t nextAlarm;
 
 bool tempButtonState = true;    //flag to indicate if button has been pressed
 bool humidButtonState = true;
@@ -65,6 +44,7 @@ void setup() {
   delay(500);
   Serial.println(tft.readID(), HEX);
   tft.fillScreen(BLACK);
+  setupRTC();
   #ifdef INIT_MEM
     EEPROM.write(TS_MEM, 72);
     EEPROM.write(HS_MEM, 72);
@@ -101,7 +81,7 @@ void loop()
         //Return from config to home button
         else if(checkButton(p, BACK_X, BACK_Y, configButtonState, backButton, *backButtonCallback)){continue;}
 
-        switch(screen)
+        switch(screen){
           case SCREEN_CONF_SETPOINTS:
             //Temp Setpoint DOWN button pressed
             if(checkButton(p, TEMP_DOWN_X, TEMP_DOWN_Y, tempButtonState, minusButton, *tempDownButtonCallback)){continue;}
@@ -123,8 +103,9 @@ void loop()
             else if(checkButton(p, INT_DOWN_X, INT_DOWN_Y, intButtonState, minusButton, *humidIntervalDownButtonCallback)){continue;}
             break;
           
-          case default:
+          default:
             break;
+        }
       }
       //Home Screen buttons
       else{
@@ -143,11 +124,65 @@ void loop()
     displayConfig();
   }
   else{
+    checkSensors();
     displayHome();
   }
 }
-*/
 
+void setupRTC(){
+  RTC.begin();
+  second = RTC.getSeconds();
+  nextAlarm = adjustAlarm(alarmPeriod + second);
+  // RTC.setHourMode(CLOCK_H12);
+  // RTC.setMeridiem(HOUR_AM);
+  // RTC.setYear(2025);
+  // RTC.setMonth(5);
+  // RTC.setDay(23);
+  // RTC.setHours(11);
+  // RTC.setMinutes(45);
+  // RTC.setSeconds(0);
+
+}
+
+void checkSensors(){
+  month = RTC.getMonth();
+  day = RTC.getDay();
+  hour = RTC.getHours();
+  minute = RTC.getMinutes();
+  second = RTC.getSeconds();
+  meridiem = RTC.getMeridiem()
+  if(second == nextAlarm){
+    nextAlarm = adjustAlarm(alarmPeriod + second);
+    alarm = true;
+  }
+  else{
+    alarm = false;
+  }
+}
+
+int8_t adjustAlarm(int8_t time){
+  if(time > 60)  return time - 60;
+  return time;
+}
+
+void lightHandler(){
+  start = convertTime24(lightOn, lightOnMer);
+  end = convertTime24(lightOff, lightOffMer);
+  currHour = convertTime24(hour, meridiem);
+  if()
+    if((currHour >= start) && (currHour < end)){
+      digitalWrite(LIGHT_PIN, HIGH);
+    }
+    else{
+      digitalWrite(LIGHT_PIN, LOW);
+    }
+}
+int convertTime24(int8_t hour, int meridiem){
+  if(meridiem == HOUR_AM){
+    return hour;
+  }
+  return hour + 12;
+}
 /*
  *  @brief  Writes user settings to EEPROM if settings changed
  */
