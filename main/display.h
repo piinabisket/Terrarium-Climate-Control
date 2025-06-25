@@ -1,7 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "main.h"
+#include "externlib.h"
 
 #define SCREEN_HOME 0
 #define SCREEN_CONF_SETPOINTS 1
@@ -85,13 +85,6 @@ const unsigned char minusButton [] PROGMEM = {
   0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 
   0xe0, 0xff, 0xff, 0xff, 0xff, 0xe0
 };
-
-extern bool tempButtonState;
-extern bool humidButtonState;
-extern bool intButtonState;
-extern bool configButtonState;
-extern bool homeButtonState;
-extern int screen;
 
 void drawButtons();
 void displayHome();

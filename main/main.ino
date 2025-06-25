@@ -1,33 +1,28 @@
 #include "main.h"
 #include "display.h"
-
-#include <Wire.h>
-#include <I2C_RTC.h>
+#include "RTC.h"
 
 MCUFRIEND_kbv tft;
-
-TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);   //Touchscreen object
+DS3231 RTC;                                          //Real-Time-Clock object
+TSPoint p;                                           //touchscreen datapoint
 
 int period = 20;                //limit screen refresh to conserve power
-int timeout = 100000;              //timeout value
 unsigned long time_now = 0;
 
-static DS3231 RTC;
-
-TSPoint p;                      //touchscreen datapoint
 int8_t humidSetpoint;           //setpoints for system to adjust to
 int8_t tempSetpoint;
 int8_t humidIntervalSetpoint;
 
-int8_t second;
+int8_t second;                  //Variables to hold current time components
 int8_t minute;
 int8_t hour;
 int8_t day;
 int8_t month;
 
-int8_t alarmPeriod = 5;         //alarm period 1 in seconds
-bool alarm = false;             //alarm 1 flag
-int8_t nextAlarm;
+int8_t timer1;                  //Timer control integers
+int8_t timer2;
+int8_t timeoutTimer;
 
 bool tempButtonState = true;    //flag to indicate if button has been pressed
 bool humidButtonState = true;
@@ -58,13 +53,10 @@ void setup() {
 
 void loop() 
 {
-  time_now = millis();  //get current time
   // Delay between measurements.
   while(millis() < time_now + period){
     TSPoint p = ts.getPoint();  //Get touch point
-    if(timeout){timeout--;}
     if (p.z > ts.pressureThreshhold) {
-      timeout = 10000;
       #ifdef SERIAL
       Serial.print("X = "); Serial.print(p.x);
       Serial.print("\tY = "); Serial.print(p.y);
@@ -114,7 +106,7 @@ void loop()
       }
     }
   }
-  if(!timeout){
+  if(checkTimer(timeoutTimer, TIMEOUT_INTERVAL, minute)){
     pinMode(XM, OUTPUT);
     pinMode(YP, OUTPUT);
     tft.fillScreen(BLACK);
@@ -124,65 +116,13 @@ void loop()
     displayConfig();
   }
   else{
-    checkSensors();
     displayHome();
   }
+  /* Operations done every time cycle regardless of screen */
+  updateClock();
+  checkTimer(timer1, humidIntervalSetpoint, second);  //Check if mister needs to be activated
 }
 
-void setupRTC(){
-  RTC.begin();
-  second = RTC.getSeconds();
-  nextAlarm = adjustAlarm(alarmPeriod + second);
-  // RTC.setHourMode(CLOCK_H12);
-  // RTC.setMeridiem(HOUR_AM);
-  // RTC.setYear(2025);
-  // RTC.setMonth(5);
-  // RTC.setDay(23);
-  // RTC.setHours(11);
-  // RTC.setMinutes(45);
-  // RTC.setSeconds(0);
-
-}
-
-void checkSensors(){
-  month = RTC.getMonth();
-  day = RTC.getDay();
-  hour = RTC.getHours();
-  minute = RTC.getMinutes();
-  second = RTC.getSeconds();
-  meridiem = RTC.getMeridiem()
-  if(second == nextAlarm){
-    nextAlarm = adjustAlarm(alarmPeriod + second);
-    alarm = true;
-  }
-  else{
-    alarm = false;
-  }
-}
-
-int8_t adjustAlarm(int8_t time){
-  if(time > 60)  return time - 60;
-  return time;
-}
-
-void lightHandler(){
-  start = convertTime24(lightOn, lightOnMer);
-  end = convertTime24(lightOff, lightOffMer);
-  currHour = convertTime24(hour, meridiem);
-  if()
-    if((currHour >= start) && (currHour < end)){
-      digitalWrite(LIGHT_PIN, HIGH);
-    }
-    else{
-      digitalWrite(LIGHT_PIN, LOW);
-    }
-}
-int convertTime24(int8_t hour, int meridiem){
-  if(meridiem == HOUR_AM){
-    return hour;
-  }
-  return hour + 12;
-}
 /*
  *  @brief  Writes user settings to EEPROM if settings changed
  */

@@ -1,5 +1,5 @@
+#include "main.h"
 #include "display.h"
-
 /*
  * @brief Display home screen
  */
@@ -28,7 +28,6 @@ void displayHome(){
   tft.print("/");
   tft.print(month);
   tft.println("\n ");
-  tft.print(alarm);
   tft.drawRect(0,0,320,240,WHITE);
 }
 /*
